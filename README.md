@@ -1,6 +1,7 @@
 # In this project we have used python language.
-# We have used 'Jupyter Notebook' and 'JupyterLab' to execute all the codes mentioned in this file.
-
+### We have used 'Jupyter Notebook' and 'JupyterLab' to execute all the codes mentioned in this file.
+### Download the Zip file 'logs_202212.zip' (which contains logs of http requests sent to DocDigitizer site in December 2022) from the following link:
+https://drive.google.com/drive/folders/114RrgWAgRwqSQTBvq4Ee_-UqYmnAeSat?usp=sharing
 # Before proceeding further you need to create separate environments for JupyterNotebook and JupyterLab to avoid overriding of various functions in different libraries
 
 # Library required in JupyterLab:
