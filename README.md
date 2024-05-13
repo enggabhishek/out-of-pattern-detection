@@ -63,6 +63,8 @@ https://drive.google.com/drive/folders/114RrgWAgRwqSQTBvq4Ee_-UqYmnAeSat?usp=sha
 * In order to close the running Dashboard process you need to:
   - Find a PID number which has been generated when you run the code in step 4 and copy that number.
   - Open a new Terminal and it should also be in the same folder where 'Dashboard.ipynb' file exists and then execute the following code by replacing '<PID>' keyword with valid PID number: 'taskkill /PID <PID> /F'
+![image](https://github.com/enggabhishek/Out-of-Pattern-Detection/assets/29338852/c1502938-9191-4b71-bfb7-771e0aee2063)
+
     
 ### Execute Dashboard-2 using JupyterLab
 * Repeat all the steps mentioned for Dashboard-1 process in the above and replace the file name from 'Dashboard.ipynb' to 'Dashboard2.ipynb'
