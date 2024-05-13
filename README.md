@@ -68,3 +68,5 @@ https://drive.google.com/drive/folders/114RrgWAgRwqSQTBvq4Ee_-UqYmnAeSat?usp=sha
     
 ### Execute Dashboard-2 using JupyterLab
 * Repeat all the steps mentioned for Dashboard-1 process in the above and replace the file name from 'Dashboard.ipynb' to 'Dashboard2.ipynb'
+![image](https://github.com/enggabhishek/Out-of-Pattern-Detection/assets/29338852/30d51de0-f405-4eea-acb3-13c3c3933053)
+
