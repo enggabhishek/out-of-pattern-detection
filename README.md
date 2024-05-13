@@ -62,8 +62,7 @@ https://drive.google.com/drive/folders/114RrgWAgRwqSQTBvq4Ee_-UqYmnAeSat?usp=sha
   - Once the code will be executed successfully you will be able to see the URL similar to this: http://localhost<>/Dashboard (Copy and paste in the address bar of the browser)
 * In order to close the running Dashboard process you need to:
   - Find a PID number which has been generated when you run the code in step 4 and copy that number.
-  - Open a new Terminal and it should also be in the same folder where 'Dashboard.ipynb' file exists and then execute the following code by replacing '<PID>' keyword with valid PID number: 'taskkill /PID <PID> /F'
-![image](https://github.com/enggabhishek/Out-of-Pattern-Detection/assets/29338852/c1502938-9191-4b71-bfb7-771e0aee2063)
+  - Open a new Terminal and it should also be in the same folder where 'Dashboard.ipynb' file exists and then execute the following code by replacing '<PID>' keyword with valid PID number: 'taskkill /PID <PID> /F'![image](https://github.com/enggabhishek/Out-of-Pattern-Detection/assets/29338852/c1502938-9191-4b71-bfb7-771e0aee2063)
 
     
 ### Execute Dashboard-2 using JupyterLab
