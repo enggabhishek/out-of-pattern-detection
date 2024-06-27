@@ -77,20 +77,20 @@ def time_format(df: pd.DataFrame):
     return df
 
 
-def plot_graph(df : pd.DataFrame):
-    # Plotting response time distribution
-    fig, ax = plt.subplots(figsize=(10, 6))
+# def plot_graph(df : pd.DataFrame):
+#     # Plotting response time distribution
+#     fig, ax = plt.subplots(figsize=(10, 6))
 
-    # Create a density plot
-    sns.kdeplot(df['Response_Time'], fill=True, color='blue', ax=ax)
+#     # Create a density plot
+#     sns.kdeplot(df['Response_Time'], fill=True, color='blue', ax=ax)
 
-    # Create a histogram with logarithmic scale on the y-axis
-    ax.hist(df['Response_Time'], bins=20, alpha=0.5, density=True, log=True, color='lightblue')
+#     # Create a histogram with logarithmic scale on the y-axis
+#     ax.hist(df['Response_Time'], bins=20, alpha=0.5, density=True, log=True, color='lightblue')
 
-    plt.xlabel('Response Time (Seconds)')
-    plt.ylabel('Density')
-    plt.title('Response Time Distribution')
-    plt.show()
+#     plt.xlabel('Response Time (Seconds)')
+#     plt.ylabel('Density')
+#     plt.title('Response Time Distribution')
+#     plt.show()
 
 # folder = 'C:/Users/abhie/OneDrive - Northeastern University/PatternDetection/Out-of-Pattern-Detection/demo'
 # get_data_etl(folder)
