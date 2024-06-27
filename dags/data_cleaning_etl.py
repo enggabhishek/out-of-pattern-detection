@@ -3,8 +3,8 @@ import glob
 import json
 import re
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+# import matplotlib.pyplot as plt
+# import seaborn as sns
 from airflow.decorators import task
 
 @task(task_id="get_data_etl")
