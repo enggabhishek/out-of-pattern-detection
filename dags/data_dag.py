@@ -22,7 +22,7 @@ with DAG(
     default_args={
         "retries": 1,
         "retry_delay": timedelta(minutes=3),
-        "azure_data_factory_conn_id": "airflow_pipeline",
+        "azure_data_factory_conn_id": "Airflow1",
         #This is a connection created on Airflow UI
         "factory_name": "docdigitizer",
         "resource_group_name": "pattern-detection",
