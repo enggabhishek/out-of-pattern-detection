@@ -24,4 +24,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Deploy to Astro
-      uses: Out-of-Pattern-Detection/deploy-action@v0.4
+      uses: enggabhishek/Out-of-Pattern-Detection/deploy-action@v0.4
