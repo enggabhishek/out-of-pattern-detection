@@ -18,6 +18,7 @@ on:
 env:
   ASTRO_API_TOKEN: ${{ inputs.apiToken || secrets.ASTRO_API_TOKEN }}
   DEPLOYMENT_ID: ${{ inputs.deploymentId || vars.DEPLOYMENT_ID }}
+  TESTNAME: ${{ vars.TESTNAME }}
 
 jobs:
   build:
