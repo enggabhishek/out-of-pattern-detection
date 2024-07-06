@@ -10,8 +10,6 @@ from airflow.operators.python import  PythonVirtualenvOperator
 def create_bar_graph(data, labels, title="Bar Graph", xlabel="X-axis", ylabel="Y-axis"):
     import matplotlib.pyplot as plt
     import os
-    from dotenv import load_dotenv
-    load_dotenv()
     
     """
     Creates and displays a bar graph.
@@ -33,7 +31,7 @@ def create_bar_graph(data, labels, title="Bar Graph", xlabel="X-axis", ylabel="Y
     print(os.environ.get("TESTNAME"))
 
 with DAG(
-    dag_id="second_pipeline_virtual_operator",
+    dag_id="virtual_operator",
     start_date=datetime(2024, 6, 29),
     schedule_interval= None,
     catchup=False,
@@ -52,7 +50,7 @@ with DAG(
     python_task = PythonVirtualenvOperator(task_id='virtualenv_python',
             python_callable=create_bar_graph,
             op_kwargs={'data': [10, 20, 30, 40, 50], 'labels': ['A', 'B', 'C', 'D', 'E'], 'title': 'Sample Bar Graph', 'xlabel':'Categories', 'ylabel':'Values'},
-            requirements=["matplotlib==3.9.0", "python-dotenv==1.0.1"],
+            requirements=["matplotlib==3.9.0"],
             system_site_packages=False,
                 )
     begin >> python_task >> end
