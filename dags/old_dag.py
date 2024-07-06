@@ -4,17 +4,15 @@ from airflow.utils.dates import days_ago
 from datetime import datetime
 from airflow.operators.empty import EmptyOperator
 from airflow.utils.edgemodifier import Label
-from airflow.utils.task_group import TaskGroup
 from airflow.decorators import task
-import sys
-import os
-import re
-import pandas as pd
-import json
 from airflow.operators.python import  PythonVirtualenvOperator
 
 def create_bar_graph(data, labels, title="Bar Graph", xlabel="X-axis", ylabel="Y-axis"):
     import matplotlib.pyplot as plt
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
+    
     """
     Creates and displays a bar graph.
     
@@ -32,7 +30,7 @@ def create_bar_graph(data, labels, title="Bar Graph", xlabel="X-axis", ylabel="Y
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     print("Completed the plotting")
-    plt.show()
+    print(os.getenv("TESTNAME"))
 
 with DAG(
     dag_id="demo_pipeline_virtual_operator",
@@ -51,15 +49,10 @@ with DAG(
 ) as dag:
     begin = EmptyOperator(task_id="begin")
     end = EmptyOperator(task_id="end")
-    # python_task = ExternalPythonOperator(task_id='virtualenv_python',
-    #         python_callable=create_bar_graph,
-    #         op_kwargs={'data': [10, 20, 30, 40, 50], 'labels': ['A', 'B', 'C', 'D', 'E'], 'title': 'Sample Bar Graph', 'xlabel':'Categories', 'ylabel':'Values'},
-    #         python=str(sys.executable).replace('\\','/')
-    #             )
     python_task = PythonVirtualenvOperator(task_id='virtualenv_python',
             python_callable=create_bar_graph,
             op_kwargs={'data': [10, 20, 30, 40, 50], 'labels': ['A', 'B', 'C', 'D', 'E'], 'title': 'Sample Bar Graph', 'xlabel':'Categories', 'ylabel':'Values'},
-            requirements=["matplotlib==3.9.0", "pandas==2.2.2"],
+            requirements=["matplotlib==3.9.0", "pandas==2.2.2", "python-dotenv==1.0.1"],
             system_site_packages=False,
                 )
     begin >> python_task >> end
