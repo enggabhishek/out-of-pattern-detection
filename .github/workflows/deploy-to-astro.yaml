@@ -28,7 +28,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build Docker image
-      run: docker build --build-arg TESTNAME=${{ vars.TESTNAME }} -t magnificent-meteoroid-6505/airflow:latest ../../
+      run: docker build --build-arg TESTNAME="Congratulations! Environment Variable is showing." -t magnificent-meteoroid-6505/airflow:latest .
 
     - name: Deploy to Astro
       uses: astronomer/deploy-action@v0.4
