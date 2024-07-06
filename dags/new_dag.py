@@ -30,7 +30,7 @@ def create_bar_graph(data, labels, title="Bar Graph", xlabel="X-axis", ylabel="Y
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     print("Completed the plotting")
-    print(os.getenv("TESTNAME"))
+    print(os.environ.get("TESTNAME"))
 
 with DAG(
     dag_id="second_pipeline_virtual_operator",
