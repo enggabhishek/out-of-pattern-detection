@@ -23,5 +23,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    jobs:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Build Docker image
+      run: docker build --build-arg TESTNAME=${{ vars.TESTNAME }} -t magnificent-meteoroid-6505/airflow:latest .
+
     - name: Deploy to Astro
       uses: astronomer/deploy-action@v0.4
