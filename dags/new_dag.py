@@ -52,7 +52,7 @@ with DAG(
     python_task = PythonVirtualenvOperator(task_id='virtualenv_python',
             python_callable=create_bar_graph,
             op_kwargs={'data': [10, 20, 30, 40, 50], 'labels': ['A', 'B', 'C', 'D', 'E'], 'title': 'Sample Bar Graph', 'xlabel':'Categories', 'ylabel':'Values'},
-            requirements=["matplotlib==3.9.0", "pandas==2.2.2", "python-dotenv==1.0.1"],
+            requirements=["matplotlib==3.9.0", "python-dotenv==1.0.1"],
             system_site_packages=False,
                 )
     begin >> python_task >> end
