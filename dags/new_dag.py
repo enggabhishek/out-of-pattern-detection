@@ -10,7 +10,7 @@ from airflow.operators.python import  PythonVirtualenvOperator
 def create_bar_graph(data, labels, title="Bar Graph", xlabel="X-axis", ylabel="Y-axis"):
     import matplotlib.pyplot as plt
     import os
-    
+    ## For gmail account
     """
     Creates and displays a bar graph.
     
@@ -29,6 +29,7 @@ def create_bar_graph(data, labels, title="Bar Graph", xlabel="X-axis", ylabel="Y
     plt.ylabel(ylabel)
     print("Completed the plotting")
     print(os.environ.get("TESTNAME"))
+    print("Successfully Tested for gmail account")
 
 with DAG(
     dag_id="virtual_operator",
