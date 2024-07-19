@@ -1,7 +1,6 @@
-import matplotlib.pyplot as plt
 from airflow.decorators import task
 
-@task(task_id='virtualenv_python')
+@task.virtualenv(task_id='virtualenv_python', requirements=["matplotlib==3.9.0"], system_site_packages=False)
 def create_bar_graph(data, labels, title, xlabel, ylabel):
    
     """
@@ -14,6 +13,7 @@ def create_bar_graph(data, labels, title, xlabel, ylabel):
     - xlabel (str): The label for the x-axis.
     - ylabel (str): The label for the y-axis.
     """
+    import matplotlib.pyplot as plt
     plt.figure(figsize=(10, 6))
     plt.bar(labels, data, color='blue')
     
