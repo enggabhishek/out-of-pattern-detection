@@ -32,7 +32,7 @@ def create_bar_graph(data, labels, title="Bar Graph", xlabel="X-axis", ylabel="Y
     print("Successfully Tested for gmail account")
 
 with DAG(
-    dag_id="virtual_operator",
+    dag_id="new_dag_operator",
     start_date=datetime(2024, 6, 29),
     schedule_interval= None,
     catchup=False,
