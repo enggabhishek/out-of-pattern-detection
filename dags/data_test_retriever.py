@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 
 @dag(start_date=datetime(2024, 6, 29), schedule_interval= None, catchup=False)
-def etl():
+def extract():
     
     @task(task_id='begin')
     def begin():
@@ -135,4 +135,4 @@ def etl():
     run2 = Feature_Engineering(run)
     finish = end()
     run2 >> finish
-dag_run = etl()
+dag_run = extract()
