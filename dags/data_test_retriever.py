@@ -1,12 +1,6 @@
 from airflow.decorators import task, dag, task_group
 import pandas as pd
 from datetime import datetime
-import os
-# from dotenv import load_dotenv
-# load_dotenv()
-account_url=os.environ.get("Data_Lake_URL")
-sas_url=os.environ.get("Data_Lake_SAS_Token")
-container_name=os.environ.get("Data_Lake_Container")
 
 @dag(start_date=datetime(2024, 6, 29), schedule_interval= None, catchup=False)
 def etl():
@@ -19,13 +13,19 @@ def etl():
     @task_group()
     def Extracting_and_Transforming_data():
         #======================================Data Cleaning Method==========================================    
-        @task.virtualenv(task_id='complete_data_cleaning_etl',requirements=["azure-storage-blob==12.20.0"],system_site_packages=True)
-        def get_data_etl(sas_url, account_url, container_name):
+        @task.virtualenv(task_id='complete_data_cleaning_etl',requirements=["azure-storage-blob==12.20.0","python-dotenv==1.0.1"],system_site_packages=True)
+        def get_data_etl():
             import json
             import re
             import pandas as pd
             from azure.storage.blob import BlobServiceClient
             import io
+            import os
+            from dotenv import load_dotenv
+            load_dotenv()
+            account_url=os.getenv("Data_Lake_URL")
+            sas_url=os.getenv("Data_Lake_SAS_Token")
+            container_name=os.getenv("Data_Lake_Container")
             #===========================Connect with Azure Data Blob Storage===========================
             blob_service_client = BlobServiceClient(account_url=account_url, credential=sas_url)
             container_client = blob_service_client.get_container_client(container_name)
@@ -101,7 +101,7 @@ def etl():
             df['Event Time'] = df['Event Time'].dt.strftime("%b %d, %Y @ %H:%M:%S.%f")
             return df
         #========================================Creating Response Time Variable=============================================
-        extract = get_data_etl(sas_url, account_url, container_name)
+        extract = get_data_etl()
         start >> extract
         transform = time_format(extract)
         return transform
