@@ -23,9 +23,12 @@ def etl():
             import os
             from dotenv import load_dotenv
             load_dotenv()
-            account_url=os.getenv("Data_Lake_URL")
-            sas_url=os.getenv("Data_Lake_SAS_Token")
-            container_name=os.getenv("Data_Lake_Container")
+            account_url=os.getenv("DATA_LAKE_URL")
+            sas_url=os.getenv("DATA_LAKE_SAS_TOKEN")
+            container_name=os.getenv("DATA_LAKE_CONTAINER")
+            print(account_url,"Account Data Type: ", type(account_url))
+            print(sas_url,"SAS Data Type: ", type(sas_url))
+            print(container_name,"Container Data Type: ", type(container_name))
             #===========================Connect with Azure Data Blob Storage===========================
             blob_service_client = BlobServiceClient(account_url=account_url, credential=sas_url)
             container_client = blob_service_client.get_container_client(container_name)
