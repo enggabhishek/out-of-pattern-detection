@@ -23,6 +23,7 @@ def etl():
             import os
             from dotenv import load_dotenv
             load_dotenv()
+            # This is the final testing
             account_url=os.getenv("DATA_LAKE_URL")
             sas_url=os.getenv("DATA_LAKE_SAS_TOKEN")
             container_name=os.getenv("DATA_LAKE_CONTAINER")
