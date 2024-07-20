@@ -2,11 +2,11 @@ from airflow.decorators import task, dag, task_group
 import pandas as pd
 from datetime import datetime
 import os
-from dotenv import load_dotenv
-load_dotenv()
-account_url=os.getenv("Data_Lake_URL")
-sas_url=os.getenv("Data_Lake_SAS_Token")
-container_name=os.getenv("Data_Lake_Container")
+# from dotenv import load_dotenv
+# load_dotenv()
+account_url=os.environ.get("Data_Lake_URL")
+sas_url=os.environ.get("Data_Lake_SAS_Token")
+container_name=os.environ.get("Data_Lake_Container")
 
 @dag(start_date=datetime(2024, 6, 29), schedule_interval= None, catchup=False)
 def etl():
