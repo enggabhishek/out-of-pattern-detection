@@ -5,14 +5,14 @@ from datetime import datetime
 from airflow.operators.empty import EmptyOperator
 from elasticsearch import Elasticsearch
 import os
-elasticsearch_CloudID=os.getenv('ELASTIC_CLOUD_ID')
-elastic_pwd=os.getenv('ELASTIC_PASSWORD')
-es = Elasticsearch(
-                cloud_id = elasticsearch_CloudID,
-                basic_auth=("elastic", elastic_pwd)
-                )
+# elasticsearch_CloudID=os.getenv('ELASTIC_CLOUD_ID')
+# elastic_pwd=os.getenv('ELASTIC_PASSWORD')
+# es = Elasticsearch(
+#                 cloud_id = elasticsearch_CloudID,
+#                 basic_auth=("elastic", elastic_pwd)
+#                 )
 @dag(start_date=datetime(2024, 6, 29), schedule_interval= None, catchup=False)
-def checking_ti_xcom():
+def checking_ti_again_xcom():
     
     @task.virtualenv(use_dill=True,system_site_packages=True)
     def create_bar_graph():
@@ -26,4 +26,4 @@ def checking_ti_xcom():
     data = create_bar_graph()
     print_the_name(data)
 
-run = checking_ti_xcom()
+run = checking_ti_again_xcom()
