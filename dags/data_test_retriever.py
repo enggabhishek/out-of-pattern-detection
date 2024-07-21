@@ -2,8 +2,9 @@ from airflow.decorators import task, dag, task_group
 import pandas as pd
 from datetime import datetime
 
-@dag(start_date=datetime(2024, 6, 29), schedule_interval= None, catchup=False)
-def extract():
+
+@dag(start_date=datetime(2023, 1, 29), schedule_interval= None, catchup=False)
+def etl():
     
     @task(task_id='begin')
     def begin():
@@ -27,9 +28,6 @@ def extract():
             account_url=os.getenv("DATA_LAKE_URL")
             sas_url=os.getenv("DATA_LAKE_SAS_TOKEN")
             container_name=os.getenv("DATA_LAKE_CONTAINER")
-            print(account_url,"Account Data Type: ", type(account_url))
-            print(sas_url,"SAS Data Type: ", type(sas_url))
-            print(container_name,"Container Data Type: ", type(container_name))
             #===========================Connect with Azure Data Blob Storage===========================
             blob_service_client = BlobServiceClient(account_url=account_url, credential=sas_url)
             container_client = blob_service_client.get_container_client(container_name)
@@ -126,6 +124,86 @@ def extract():
             print(df['HeavyLoad'].head())
             print("Completed the data cleaning")
         load = target_variable(data)
+        return load
+        
+    @task_group()
+    def KafkaStreamingToElasticSearch(df):
+        @task.virtualenv(task_id='KafkaProducer',requirements=["kafka-python==2.0.2","python-dotenv==1.0.1"],system_site_packages=True)
+        def KafkaProducer(df):
+            import os
+            import json
+            from kafka import KafkaProducer
+            from dotenv import load_dotenv
+            load_dotenv()
+            sasl_plain_username=os.getenv("UPSTASH_KAFKA_REST_USERNAME")
+            sasl_plain_password=os.getenv("UPSTASH_KAFKA_REST_PASSWORD")
+            
+            producer = KafkaProducer(
+                        bootstrap_servers='massive-goldfish-12710-us1-kafka.upstash.io:9092',
+                        sasl_mechanism='SCRAM-SHA-256',
+                        security_protocol='SASL_SSL',
+                        sasl_plain_username=sasl_plain_username,
+                        sasl_plain_password=sasl_plain_password,
+                        value_serializer=lambda v: json.dumps(v).encode('utf-8')
+                    )
+            count_producer=0
+            for _, row in df.iterrows():
+                count_producer+=1
+                producer.send('httplogs', row.to_dict())
+            return count_producer
+         
+        @task.virtualenv(task_id='SendingLogsToElasticSearch', requirements=["kafka-python==2.0.2","elasticsearch==8.14.0","python-dotenv==1.0.1"],system_site_packages=True)   
+        def KafkaConsumer(count_producer):
+            import os
+            import json
+            from kafka import KafkaConsumer
+            from dotenv import load_dotenv
+            load_dotenv()
+            from elasticsearch import Elasticsearch
+            
+            sasl_plain_username=os.getenv("UPSTASH_KAFKA_REST_USERNAME")
+            sasl_plain_password=os.getenv("UPSTASH_KAFKA_REST_PASSWORD")
+            elasticsearch_CloudID=os.getenv('ELASTIC_CLOUD_ID')
+            elastic_pwd=os.getenv('ELASTIC_PASSWORD')
+            
+            consumer = KafkaConsumer(
+                        'httplogs',
+                        bootstrap_servers='massive-goldfish-12710-us1-kafka.upstash.io:9092',
+                        sasl_mechanism='SCRAM-SHA-256',
+                        security_protocol='SASL_SSL',
+                        sasl_plain_username=sasl_plain_username,
+                        sasl_plain_password=sasl_plain_password,
+                        group_id='Abhishek',
+                        auto_offset_reset='earliest',
+                        value_deserializer=lambda x: json.loads(x.decode('utf-8'))
+                    )
+            es = Elasticsearch(
+                cloud_id = elasticsearch_CloudID,
+                basic_auth=("elastic", elastic_pwd)
+                )
+            
+            count_consumer = 0
+            for message in consumer:
+                record = message.value
+                count_consumer+=1
+                if count_consumer == count_producer:
+                    print('Completed the process')
+                    break
+                body ={
+                        "Event Time": pd.to_datetime(record['Event Time'], format="%b %d, %Y @ %H:%M:%S.%f").isoformat(),
+                        "TimeStamp Request": pd.to_datetime(record['Timestamp Request'], format="%b %d, %Y @ %H:%M:%S.%f").isoformat(),
+                        "TimeStamp Response": pd.to_datetime(record['Timestamp Response'], format="%b %d, %Y @ %H:%M:%S.%f").isoformat(),
+                        "HTTP Method": record['HTTP Method'],
+                        "HTTP URL": record['HTTP Url'],
+                        "HTTP Auth": record['HTTP Auth'],
+                        "Resource": record['Resource'],
+                        "Organization": record['Organization'],
+                        "Heavy Load": record['HeavyLoad']
+                        } 
+            es.index(index='http_logs', body=body)
+        prod = KafkaProducer(df)
+        cons = KafkaConsumer(prod)
+        
         
     @task(task_id='end')
     def end():
@@ -133,6 +211,7 @@ def extract():
     
     run = Extracting_and_Transforming_data()
     run2 = Feature_Engineering(run)
+    run3 = KafkaStreamingToElasticSearch(run2)
     finish = end()
-    run2 >> finish
-dag_run = extract()
+    run3 >> finish
+dag_run = etl()
