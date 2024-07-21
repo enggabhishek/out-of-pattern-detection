@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 @dag(start_date=datetime(2023, 1, 29), schedule_interval= None, catchup=False)
-def etl():
+def extract():
     
     @task(task_id='begin')
     def begin():
@@ -143,6 +143,7 @@ def etl():
                         sasl_mechanism='SCRAM-SHA-256',
                         security_protocol='SASL_SSL',
                         sasl_plain_username=sasl_plain_username,
+                        request_timeout_ms=100000, 
                         sasl_plain_password=sasl_plain_password,
                         value_serializer=lambda v: json.dumps(v).encode('utf-8')
                     )
@@ -214,4 +215,4 @@ def etl():
     run3 = KafkaStreamingToElasticSearch(run2)
     finish = end()
     run3 >> finish
-dag_run = etl()
+dag_run = extract()
