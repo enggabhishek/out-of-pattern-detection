@@ -4,9 +4,9 @@ from airflow import DAG
 from datetime import datetime
 from airflow.operators.empty import EmptyOperator
 from elasticsearch import Elasticsearch
-
-elasticsearch_CloudID="79ab1496a2b04fd9b2a1ceb28e09c525:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvJDhhNjdmNjZjZmU4ZTRlNDI5OTZlOTg2ZjU2MmY2MGUyJGJjOGFhNzhjYzY0NDRjNTlhMDk5MTY0YmZlZDdjNmU5"
-elastic_pwd="ViYtDrqnFKqyzwNdSyr5XOWG"
+import os
+elasticsearch_CloudID=os.getenv('ELASTIC_CLOUD_ID')
+elastic_pwd=os.getenv('ELASTIC_PASSWORD')
 es = Elasticsearch(
                 cloud_id = elasticsearch_CloudID,
                 basic_auth=("elastic", elastic_pwd)
