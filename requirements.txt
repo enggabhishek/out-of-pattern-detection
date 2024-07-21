@@ -1,3 +1,1 @@
 apache-airflow-providers-apache-kafka==1.5.0
-asgiref==3.8.1
-confluent-kafka==2.5.0
