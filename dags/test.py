@@ -1,9 +1,9 @@
 from airflow.decorators import task, dag
-from datetime import timedelta
-from airflow import DAG
+# from datetime import timedelta
+# from airflow import DAG
 from datetime import datetime
-from airflow.operators.empty import EmptyOperator
-from elasticsearch import Elasticsearch
+# from airflow.operators.empty import EmptyOperator
+# from elasticsearch import Elasticsearch
 import os
 # elasticsearch_CloudID=os.getenv('ELASTIC_CLOUD_ID')
 # elastic_pwd=os.getenv('ELASTIC_PASSWORD')
