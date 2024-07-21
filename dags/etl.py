@@ -7,8 +7,8 @@ import json
 from elasticsearch import Elasticsearch
 import os
 
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 account_url=os.getenv("DATA_LAKE_URL")
 sas_url=os.getenv("DATA_LAKE_SAS_TOKEN")
 container_name=os.getenv("DATA_LAKE_CONTAINER")
