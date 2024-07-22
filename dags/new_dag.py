@@ -12,6 +12,7 @@ def create_bar_graph():
     print(account_url,"Account Data Type: ", type(account_url))
     print(sas_url,"SAS Data Type: ", type(sas_url))
     print(container_name,"Container Data Type: ", type(container_name))
+    print("Finally")
 
 with DAG(
     dag_id="new_dag_operator",
