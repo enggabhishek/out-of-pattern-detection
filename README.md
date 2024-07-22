@@ -1,4 +1,4 @@
-# In this project we have used python language.
+# Project Description
 Developed and deployed predictive models to identify and flag anomalous patterns in 16 GB of HTTP request log data, significantly enhancing Docdigitizer's cybersecurity threat detection capabilities.
 
 ### Task 1
