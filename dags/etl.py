@@ -37,7 +37,8 @@ def consume_function(message):
                         "HTTP Auth": message_content['HTTP Auth'],
                         "Resource": message_content['Resource'],
                         "Organization": message_content['Organization'],
-                        "Heavy Load": message_content['HeavyLoad']
+                        "Heavy Load": message_content['HeavyLoad'],
+                        "Source IP": message_content['SourceIP']
                         } 
     es.index(index='http_logs', body=body)
     
