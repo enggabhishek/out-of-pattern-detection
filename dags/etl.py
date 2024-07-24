@@ -6,7 +6,7 @@ from airflow.providers.apache.kafka.operators.consume import ConsumeFromTopicOpe
 import json
 from elasticsearch import Elasticsearch
 import os
-
+import numpy as np
 # from dotenv import load_dotenv
 # load_dotenv()
 account_url=os.getenv("DATA_LAKE_URL")
@@ -158,6 +158,7 @@ def extract():
             ub = Q3 + 1.5 * IQR
             # Create a new column 'if_highload'
             df['HeavyLoad'] = df['Response Time'].apply(lambda x: 1 if x > ub else 0)
+            df['Transformed_HTTP_Auth'] = np.where(df['HTTP Auth'].str.contains('USER_KEY'), 'User', 'Organization')
             print(df['HeavyLoad'].head())
             print("Completed the data cleaning")
             return df
