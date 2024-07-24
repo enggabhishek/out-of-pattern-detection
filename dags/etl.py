@@ -34,7 +34,7 @@ def consume_function(message):
                         "TimeStamp Response": pd.to_datetime(message_content['Timestamp Response'], format="%b %d, %Y @ %H:%M:%S.%f").isoformat(),
                         "HTTP Method": message_content['HTTP Method'],
                         "HTTP URL": message_content['HTTP Url'],
-                        "HTTP Auth": message_content['HTTP Auth'],
+                        "Transformed_HTTP_Auth": message_content['Transformed_HTTP_Auth'],
                         "Resource": message_content['Resource'],
                         "Organization": message_content['Organization'],
                         "Heavy Load": message_content['HeavyLoad'],
