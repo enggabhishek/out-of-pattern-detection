@@ -40,7 +40,7 @@ def consume_function(message):
                         "Heavy Load": message_content['HeavyLoad'],
                         "Source IP": message_content['SourceIP']
                         } 
-    es.index(index='http_logs', body=body)
+    es.index(index='http_logs',id = key ,document=body)
 
 #============================Defining DAG===============================================
 @dag(start_date=datetime(2023, 1, 29), schedule_interval= None, catchup=False)
