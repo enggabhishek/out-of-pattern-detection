@@ -156,8 +156,6 @@ def demo():
             # Create a new column 'if_highload'
             df['HeavyLoad'] = df['Response Time'].apply(lambda x: 1 if x > ub else 0)
             df['Transformed_HTTP_Auth'] = np.where(df['HTTP Auth'].str.contains('USER_KEY'), 'User', 'Organization')
-            print(df['HeavyLoad'].head())
-            print("Completed the data cleaning")
             return df
         load = target_variable(df)
         return load
