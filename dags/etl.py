@@ -26,7 +26,7 @@ def prod_function(data):
         
 #==============Consumer Callable Function==================       
 def consume_function(message):
-    key = json.loads(message.key())
+    key = json.loads(message.key().decode('utf-8'))
     message_content = json.loads(message.value().decode('utf-8'))
     body ={
                         "Event Time": pd.to_datetime(message_content['Event Time'], format="%b %d, %Y @ %H:%M:%S.%f").isoformat(),
@@ -39,10 +39,8 @@ def consume_function(message):
                         "Organization": message_content['Organization'],
                         "Heavy Load": message_content['HeavyLoad'],
                         "Source IP": message_content['SourceIP']
-                        } 
-    es.index(index='http_logs', body=body)
-    
-    print(f"Key >> {key}")
+            } 
+    es.index(index='http_logs',id = key ,document=body)
 
 #============================Defining DAG===============================================
 @dag(start_date=datetime(2023, 1, 29), schedule_interval= None, catchup=False)
@@ -76,7 +74,6 @@ def extract():
                     decoded_content = io.StringIO(decoded_content)
                     for line in decoded_content:
                         match = re.match(r'(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}),(\w+),(\w+),({.+})', line)
-                        print(match)
                         if match:
                             timestamp, code, event_id, payload = match.groups()
                             try:
@@ -159,8 +156,6 @@ def extract():
             # Create a new column 'if_highload'
             df['HeavyLoad'] = df['Response Time'].apply(lambda x: 1 if x > ub else 0)
             df['Transformed_HTTP_Auth'] = np.where(df['HTTP Auth'].str.contains('USER_KEY'), 'User', 'Organization')
-            print(df['HeavyLoad'].head())
-            print("Completed the data cleaning")
             return df
         load = target_variable(df)
         return load

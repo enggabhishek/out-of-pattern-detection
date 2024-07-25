@@ -41,6 +41,7 @@ Create Pipeline in `MS Azure Data Factory` for triggering Apache Airflow DAG usi
   ![alt text](Airflow_DAG.png)
   - After the data is ingested into `Elastic` Cloud, it can be utilized to create a Kibana dashboard, which will display the HTTP request patterns over various time periods:
 ![alt text](Kibana_Dashboard.png)
+![alt text](Kibana_Dashboard_2.png)
 
 ### Steps to Perform Predictive Analytics:
   - After completion of EDA, export the Data from `Kibana` into csv which includes additional attributes created in Kibaba using `Lucene Expressions`
