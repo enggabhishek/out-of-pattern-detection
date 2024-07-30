@@ -1,6 +1,8 @@
 # Project Description
 Developed and deployed predictive models to identify and flag anomalous patterns in 16 GB of HTTP request log data, significantly enhancing Docdigitizer's cybersecurity threat detection capabilities.
 
+![alt text](Airflow_Pipeline.png)
+
 ### Task 1
 Build `Blob Storage` based `Azure Data Lake Storage Gen2`.
 ![alt text](BlobStorageContainer.png)
@@ -46,4 +48,5 @@ Create Pipeline in `MS Azure Data Factory` for triggering Apache Airflow DAG usi
 ### Steps to Perform Predictive Analytics:
   - After completion of EDA, export the Data from `Kibana` into csv which includes additional attributes created in Kibaba using `Lucene Expressions`
   - Achieved 93% accuracy in load factor estimation and anomaly detection using Logistic Regression, Decision Tree, and Random Forest models, enhancing system reliability.
+
 [![Astronomer CI - Deploy code](https://github.com/enggabhishek/Out-of-Pattern-Detection/actions/workflows/deploy-to-astro.yaml/badge.svg)](https://github.com/enggabhishek/Out-of-Pattern-Detection/actions/workflows/deploy-to-astro.yaml)
