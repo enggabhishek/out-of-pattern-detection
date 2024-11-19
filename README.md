@@ -49,4 +49,4 @@ Create Pipeline in `MS Azure Data Factory` for triggering Apache Airflow DAG usi
   - After completion of EDA, export the Data from `Kibana` into csv which includes additional attributes created in Kibaba using `Lucene Expressions`
   - Achieved 93% accuracy in load factor estimation and anomaly detection using Logistic Regression, Decision Tree, and Random Forest models, enhancing system reliability.
 
-[![Astronomer CI - Deploy code](https://github.com/enggabhishek/out-of-pattern-detection/actions/workflows/deploy-to-astro.yaml/badge.svg)](https://github.com/enggabhishek/out-of-pattern-Detection/actions/workflows/deploy-to-astro.yaml)
+[![Astronomer CI - Deploy code](https://github.com/enggabhishek/out-of-pattern-detection/actions/workflows/deploy-to-astro.yaml/badge.svg)](https://github.com/enggabhishek/out-of-pattern-detection/actions/workflows/deploy-to-astro.yaml)
