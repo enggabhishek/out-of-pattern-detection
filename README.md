@@ -1,11 +1,11 @@
 # Project Description
 Developed and deployed predictive models to identify and flag anomalous patterns in 16 GB of HTTP request log data, significantly enhancing Docdigitizer's cybersecurity threat detection capabilities.
 
-![alt text](Airflow_Pipeline.png)
+![alt text](airflow_pipeline.png)
 
 ### Task 1
 Build `Blob Storage` based `Azure Data Lake Storage Gen2`.
-![alt text](BlobStorageContainer.png)
+![alt text](blobstoragecontainer.png)
 
 ### Task 2:
 Build `Managed Identities` in MS Azure.
@@ -28,11 +28,11 @@ Set up Kibana for building Dashboard on Elastic cloud platform.
 
 ### Task 7:
 Create `MS Azure Function App`.
-![alt text](Azure_Function_App.png)
+![alt text](azure_function_app.png)
 
 ### Task 8:
 Create Pipeline in `MS Azure Data Factory` for triggering Apache Airflow DAG using `Storage Event`.
-![alt text](StorageEventTriggerDataFactory.png)
+![alt text](storageeventtriggerdatafactory.png)
 
 
 ## Steps to Perform Exploratory Data Analysis on Live Stream Data:
@@ -40,13 +40,13 @@ Create Pipeline in `MS Azure Data Factory` for triggering Apache Airflow DAG usi
   - Set up Git Action for CI/CD process for deploying DAG file directly into Astrnomer Airflow Cloud.
   - Once the log file will be created/uploaded in the Azure Blob Storage then it will initiate Storage Event Trigger.
   - Then Apache `Airflow` DAG on Astronomer cloud will be triggered:
-  ![alt text](Airflow_DAG.png)
+  ![alt text](airflow_dag.png)
   - After the data is ingested into `Elastic` Cloud, it can be utilized to create a Kibana dashboard, which will display the HTTP request patterns over various time periods:
-![alt text](Kibana_Dashboard.png)
-![alt text](Kibana_Dashboard_2.png)
+![alt text](kibana_dashboard.png)
+![alt text](kibana_dashboard_2.png)
 
 ### Steps to Perform Predictive Analytics:
   - After completion of EDA, export the Data from `Kibana` into csv which includes additional attributes created in Kibaba using `Lucene Expressions`
   - Achieved 93% accuracy in load factor estimation and anomaly detection using Logistic Regression, Decision Tree, and Random Forest models, enhancing system reliability.
 
-[![Astronomer CI - Deploy code](https://github.com/enggabhishek/Out-of-Pattern-Detection/actions/workflows/deploy-to-astro.yaml/badge.svg)](https://github.com/enggabhishek/Out-of-Pattern-Detection/actions/workflows/deploy-to-astro.yaml)
+[![Astronomer CI - Deploy code](https://github.com/enggabhishek/out-of-pattern-detection/actions/workflows/deploy-to-astro.yaml/badge.svg)](https://github.com/enggabhishek/out-of-pattern-Detection/actions/workflows/deploy-to-astro.yaml)
