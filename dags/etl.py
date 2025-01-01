@@ -7,6 +7,7 @@ import json
 from elasticsearch import Elasticsearch
 import os
 import numpy as np
+from concurrent.futures import ThreadPoolExecutor, as_completed
 # from dotenv import load_dotenv
 # load_dotenv()
 account_url=os.getenv("DATA_LAKE_URL")
@@ -50,67 +51,77 @@ def extract():
     def begin():
         pass
     start = begin()
-    
+#==========================================Extracting and Transforming Task Group=========================================
     @task_group()
-    def Extracting_and_Transforming_data(account_url,sas_url, container_name):
+    def Extracting_and_Transforming_data(account_url, sas_url, container_name):
         #======================================Data Cleaning Method==========================================    
         @task.virtualenv(task_id='complete_data_cleaning_etl',requirements=["azure-storage-blob==12.20.0"],system_site_packages=True)
-        def get_data_etl(account_url,sas_url, container_name):
+        def get_data_etl(account_url, sas_url, container_name):
             import json
             import re
             import pandas as pd
             from azure.storage.blob import BlobServiceClient
             import io
-            
+
             #===========================Connect with Azure Data Blob Storage===========================
             blob_service_client = BlobServiceClient(account_url=account_url, credential=sas_url)
             container_client = blob_service_client.get_container_client(container_name)
             blob_list = container_client.list_blobs()
+            
             log_data = []
-            for file in blob_list:
-                if file.name.endswith(".log"):
-                    content = container_client.get_blob_client(file.name).download_blob().readall()
-                    decoded_content = content.decode('utf-8')
-                    decoded_content = io.StringIO(decoded_content)
-                    for line in decoded_content:
-                        match = re.match(r'(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}),(\w+),(\w+),({.+})', line)
-                        if match:
-                            timestamp, code, event_id, payload = match.groups()
-                            try:
-                                payload_json = json.loads(payload)
-                                nested_json = json.loads(payload_json["b64Payload"])
-                                log_data.append([
-                                                timestamp, code, event_id,
-                                                payload_json["MessageCode"],
-                                                payload_json["EventId"],
-                                                payload_json["EventTime"],
-                                                payload_json["IngestTime"],
-                                                nested_json["requestId"],
-                                                nested_json["sourceIp"],
-                                                nested_json["httpMethod"],
-                                                nested_json["httpUrl"],
-                                                nested_json["httpAuth"],
-                                                nested_json["httpAuthHash"],
-                                                nested_json["resource"],
-                                                nested_json["resourceClass"],
-                                                nested_json["resourceMethod"],
-                                                nested_json["organization"],
-                                                nested_json["app"],
-                                                nested_json["user"],
-                                                nested_json["entity"],
-                                                nested_json["timestamp_req"],
-                                                nested_json["timestamp_resp"]
-                                            ])
-                            except (ValueError, KeyError):
-                                print(f"Failed to parse payload: {payload}")
-                        else:
-                            print("No match found")
+
+            def process_blob(file):
+                content = container_client.get_blob_client(file.name).download_blob().readall()
+                decoded_content = content.decode('utf-8')
+                decoded_content = io.StringIO(decoded_content)
+                for line in decoded_content:
+                    match = re.match(r'(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}),(\w+),(\w+),({.+})', line)
+                    if match:
+                        timestamp, code, event_id, payload = match.groups()
+                        try:
+                            payload_json = json.loads(payload)
+                            nested_json = json.loads(payload_json["b64Payload"])
+                            log_data.append([
+                                timestamp, code, event_id,
+                                payload_json["MessageCode"],
+                                payload_json["EventId"],
+                                payload_json["EventTime"],
+                                payload_json["IngestTime"],
+                                nested_json["requestId"],
+                                nested_json["sourceIp"],
+                                nested_json["httpMethod"],
+                                nested_json["httpUrl"],
+                                nested_json["httpAuth"],
+                                nested_json["httpAuthHash"],
+                                nested_json["resource"],
+                                nested_json["resourceClass"],
+                                nested_json["resourceMethod"],
+                                nested_json["organization"],
+                                nested_json["app"],
+                                nested_json["user"],
+                                nested_json["entity"],
+                                nested_json["timestamp_req"],
+                                nested_json["timestamp_resp"]
+                            ])
+                        except (ValueError, KeyError):
+                            print(f"Failed to parse payload: {payload}")
+                    else:
+                        print("No match found")
+
+            with ThreadPoolExecutor() as executor:
+                futures = {executor.submit(process_blob, file): file for file in blob_list if file.name.endswith(".log")}
+                for future in as_completed(futures):
+                    try:
+                        future.result()
+                    except Exception as e:
+                        print(f"Exception occurred: {e}")
+
             df = pd.DataFrame(log_data, columns=["TimeStamp", "Code", "EventID1", "MessageCode", "EventID2", "Event Time", "Ingest Time", 
-                                                    "RequestID", "SourceIP", "HTTP Method", "HTTP Url", "HTTP Auth", "HTTPAuthHash", 
-                                                    "Resource", "ResourceClass", "ResourceMethod", "Organization", "App", "User", "Entity", 
-                                                    "Timestamp Request", "Timestamp Response"])
-            columns_to_drop = ['TimeStamp', 'EventID1',"EventID2", 'MessageCode', 'Code', 'RequestID', 'HTTPAuthHash', 'ResourceClass', 
-                        'ResourceMethod', 'Entity', 'App', 'User']  
+                                                "RequestID", "SourceIP", "HTTP Method", "HTTP Url", "HTTP Auth", "HTTPAuthHash", 
+                                                "Resource", "ResourceClass", "ResourceMethod", "Organization", "App", "User", "Entity", 
+                                                "Timestamp Request", "Timestamp Response"])
+            columns_to_drop = ['TimeStamp', 'EventID1', 'EventID2', 'MessageCode', 'Code', 'RequestID', 'HTTPAuthHash', 'ResourceClass', 
+                            'ResourceMethod', 'Entity', 'App', 'User']  
             df_clean = df.drop(columns=columns_to_drop)
             del df, log_data
             return df_clean
@@ -160,7 +171,7 @@ def extract():
         load = target_variable(df)
         return load
 
-        #===========================================================================
+        #============================================================================================================
 #==========================================Kafka Streaming To ElasticSearch Task Group=========================================
                        
     @task_group()
