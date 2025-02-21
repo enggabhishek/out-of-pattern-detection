@@ -112,7 +112,7 @@ def extract():
                 futures = {executor.submit(process_blob, file): file for file in blob_list if file.name.endswith(".log")}
                 for future in as_completed(futures):
                     try:
-                        future.result()
+                        log_data.append(future.result())
                     except Exception as e:
                         print(f"Exception occurred: {e}")
 
